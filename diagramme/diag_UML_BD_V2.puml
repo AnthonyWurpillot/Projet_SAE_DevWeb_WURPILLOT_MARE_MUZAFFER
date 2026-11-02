@@ -1,0 +1,86 @@
+@startuml
+hide methods
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+entity Utilisateur {
+  idUtilisateur : INT <<PK>>
+  --
+  pseudo : VARCHAR <<UNIQUE>>
+  nom : VARCHAR
+  prenom : VARCHAR
+  email : VARCHAR <<UNIQUE>>
+  nbTouites : INT
+}
+
+entity Touite {
+  idTouite : INT <<PK>>
+  --
+  texte : VARCHAR(235)
+  datePublication : DATE
+  idAuteur : INT <<FK>>
+}
+
+entity Image {
+  idImage : INT <<PK>>
+  --
+  description : VARCHAR
+  chemin : VARCHAR
+  idTouite : INT <<FK, UNIQUE>>
+}
+
+entity Tag {
+  idTag : INT <<PK>>
+  --
+  libelle : VARCHAR
+  description : VARCHAR
+}
+
+entity Suivre {
+  idSuiveur : INT <<PK, FK>>
+  idSuivi : INT <<PK, FK>>
+}
+
+entity Touite_Tag {
+  idTouite : INT <<PK, FK>>
+  idTag : INT <<PK, FK>>
+}
+
+entity Abonnement_Tag {
+  idUtilisateur : INT <<PK, FK>>
+  idTag : INT <<PK, FK>>
+}
+
+entity Note {
+  idUtilisateur : INT <<PK, FK>>
+  idTouite : INT <<PK, FK>>
+  --
+  valeur : INT
+}
+
+Utilisateur "1" -- "0..*" Touite : publie
+
+Touite "1" -- "0..1" Image : possede
+
+Touite "1" -- "0..*" Touite_Tag : concerne
+Tag "1" -- "0..*" Touite_Tag : concerne
+
+Utilisateur "1" -- "0..*" Suivre : suiveur
+Utilisateur "1" -- "0..*" Suivre : suivi
+
+Utilisateur "1" -- "0..*" Abonnement_Tag : abonne
+Tag "1" -- "0..*" Abonnement_Tag : concerne
+
+Utilisateur "1" -- "0..*" Note : donne
+Touite "1" -- "0..*" Note : recoit
+
+note right of Note
+  Un utilisateur ne peut noter
+  un touite qu'une seule fois.
+  Valeur limité à 1 ou -1.
+end note
+
+note right of Suivre
+Un utilisateur ne peut pas se suivre lui même.
+end note
+@enduml
