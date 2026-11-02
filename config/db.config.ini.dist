@@ -2,4 +2,4 @@ driver=mysql
 host=localhost
 database=touiteur
 username=root
-password=""
+password=
