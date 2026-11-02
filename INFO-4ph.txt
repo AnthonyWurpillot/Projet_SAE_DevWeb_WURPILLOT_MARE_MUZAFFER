@@ -1,0 +1,13 @@
+
+
+
+Shémas et préparation de la BD, relation, clés etc/ Anthony
+
+
+
+Architecture, Dessin et préparation de l'affichage html, css 
+Dispatch, Repertory, Action, autoload, action, index.php (Mouzaffer) 
+
+
+Interface (maquette) des différentes pages web (Axel)
+
