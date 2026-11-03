@@ -1,0 +1,125 @@
+
+-- 1. TABLE UTILISATEUR
+CREATE TABLE Utilisateur (
+                             idUtilisateur NUMBER(10),
+                             pseudo        VARCHAR2(50) NOT NULL,
+                             nom           VARCHAR2(50),
+                             prenom        VARCHAR2(50),
+                             email         VARCHAR2(100) NOT NULL,
+                             nbTouites     NUMBER(10) DEFAULT 0 NOT NULL,
+
+                             CONSTRAINT pk_utilisateur PRIMARY KEY (idUtilisateur),
+                             CONSTRAINT uq_utilisateur_pseudo UNIQUE (pseudo),
+                             CONSTRAINT uq_utilisateur_email UNIQUE (email),
+                             CONSTRAINT ck_utilisateur_nb CHECK (nbTouites >= 0)
+);
+
+-- 2. TABLE TOUITE
+CREATE TABLE Touite (
+                        idTouite        NUMBER(10),
+                        texte           VARCHAR2(235) NOT NULL,
+                        datePublication DATE DEFAULT SYSDATE NOT NULL,
+                        idAuteur        NUMBER(10) NOT NULL,
+
+                        CONSTRAINT pk_touite PRIMARY KEY (idTouite),
+                        CONSTRAINT fk_touite_auteur
+                            FOREIGN KEY (idAuteur)
+                                REFERENCES Utilisateur(idUtilisateur)
+);
+
+-- 3. TABLE IMAGE
+CREATE TABLE Image (
+                       idImage     NUMBER(10),
+                       description VARCHAR2(255),
+                       chemin      VARCHAR2(255) NOT NULL,
+                       idTouite    NUMBER(10) NOT NULL,
+
+                       CONSTRAINT pk_image PRIMARY KEY (idImage),
+                       CONSTRAINT uq_image_touite UNIQUE (idTouite),
+                       CONSTRAINT fk_image_touite
+                           FOREIGN KEY (idTouite)
+                               REFERENCES Touite(idTouite)
+);
+
+-- 4. TABLE TAG
+CREATE TABLE Tag (
+                     idTag       NUMBER(10),
+                     libelle     VARCHAR2(100) NOT NULL,
+                     description VARCHAR2(255),
+
+                     CONSTRAINT pk_tag PRIMARY KEY (idTag)
+);
+
+
+-- 5. TABLE SUIVRE
+CREATE TABLE Suivre (
+                        idSuiveur NUMBER(10),
+                        idSuivi   NUMBER(10),
+
+                        CONSTRAINT pk_suivre
+                            PRIMARY KEY (idSuiveur, idSuivi),
+
+                        CONSTRAINT fk_suivre_suiveur
+                            FOREIGN KEY (idSuiveur)
+                                REFERENCES Utilisateur(idUtilisateur),
+
+                        CONSTRAINT fk_suivre_suivi
+                            FOREIGN KEY (idSuivi)
+                                REFERENCES Utilisateur(idUtilisateur),
+
+                        CONSTRAINT ck_suivre_soi CHECK (idSuiveur <> idSuivi)
+);
+
+-- 6. TABLE TOUITE_TAG
+CREATE TABLE Touite_Tag (
+                            idTouite NUMBER(10),
+                            idTag    NUMBER(10),
+
+                            CONSTRAINT pk_touite_tag
+                                PRIMARY KEY (idTouite, idTag),
+
+                            CONSTRAINT fk_tt_touite
+                                FOREIGN KEY (idTouite)
+                                    REFERENCES Touite(idTouite),
+
+                            CONSTRAINT fk_tt_tag
+                                FOREIGN KEY (idTag)
+                                    REFERENCES Tag(idTag)
+);
+
+-- 7. TABLE ABONNEMENT_TAG
+CREATE TABLE Abonnement_Tag (
+                                idUtilisateur NUMBER(10),
+                                idTag         NUMBER(10),
+
+                                CONSTRAINT pk_abonnement_tag
+                                    PRIMARY KEY (idUtilisateur, idTag),
+
+                                CONSTRAINT fk_at_utilisateur
+                                    FOREIGN KEY (idUtilisateur)
+                                        REFERENCES Utilisateur(idUtilisateur),
+
+                                CONSTRAINT fk_at_tag
+                                    FOREIGN KEY (idTag)
+                                        REFERENCES Tag(idTag)
+);
+
+-- 8. TABLE NOTE
+CREATE TABLE Note (
+                      idUtilisateur NUMBER(10),
+                      idTouite      NUMBER(10),
+                      valeur        NUMBER(1) NOT NULL,
+
+                      CONSTRAINT pk_note
+                          PRIMARY KEY (idUtilisateur, idTouite),
+
+                      CONSTRAINT fk_note_utilisateur
+                          FOREIGN KEY (idUtilisateur)
+                              REFERENCES Utilisateur(idUtilisateur),
+
+                      CONSTRAINT fk_note_touite
+                          FOREIGN KEY (idTouite)
+                              REFERENCES Touite(idTouite),
+
+                      CONSTRAINT ck_note_valeur CHECK (valeur IN (-1, 1))
+);
