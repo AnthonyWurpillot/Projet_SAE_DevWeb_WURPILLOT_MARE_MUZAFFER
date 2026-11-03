@@ -1,0 +1,19 @@
+
+<!-- FORMULAIRE DE PUBLICATION -->
+<!-- TWEETFORMRENDERER -->
+
+<section class="tweet-composer">
+
+    <form method="post" enctype="multipart/form-data">
+
+        <textarea name="text" placeholder="Quoi de neuf ?" maxlength="235" rows="3" required></textarea>
+
+        <div class="composer-actions">
+            <label for="tweet-image" class="attachment-button">
+                Ajouter une image
+            </label>
+            <input type="file" id="tweet-image" name="image" accept="image/*" hidden>
+            <button type="submit" class="publish-button">Publier</button>
+        </div>
+    </form>
+</section>
