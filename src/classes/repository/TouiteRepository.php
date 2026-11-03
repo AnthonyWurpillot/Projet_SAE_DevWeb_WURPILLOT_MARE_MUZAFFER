@@ -67,6 +67,3 @@ return $this->pdo;
       (means no password!)
 "
 */
-
-
-
