@@ -1,0 +1,62 @@
+CREATE OR REPLACE TRIGGER trg_ajouter_touite
+
+    AFTER INSERT ON TOUITE
+    FOR EACH ROW
+        begin
+            UPDATE UTILISATEUR
+                SET NBTOUITES = NBTOUITES + 1
+            where IDUTILISATEUR = :NEW.idAuteur;
+        end;
+/
+
+CREATE OR REPLACE TRIGGER trg_verifier_suivre
+BEFORE INSERT OR UPDATE ON SUIVRE
+FOR EACH ROW
+    DECLARE
+    v_email_suiveur UTILISATEUR.EMAIL%type;
+    v_email_suivi UTILISATEUR.EMAIL%type;
+    BEGIN
+        if :NEW.idSuivi = :NEW.idSuiveur THEN
+            RAISE_APPLICATION_ERROR(-2001, 'Un utilisateur ne peut pas se suivre lui même.');
+        end if;
+
+        select EMAIL into v_email_suivi
+        from UTILISATEUR
+        where IDUTILISATEUR = :NEW.idSuivi;
+
+        select EMAIL into v_email_suiveur
+        from UTILISATEUR
+        where IDUTILISATEUR = :NEW.idSuiveur;
+
+        IF LOWER(TRIM(v_email_suiveur)) = LOWER(TRIM(v_email_suivi)) THEN
+            RAISE_APPLICATION_ERROR(-2001, 'Un utilisateur ne peut pas suivre un utilisateur ayant le même EMAIL.');
+        end if;
+    end;
+/
+
+CREATE OR REPLACE TRIGGER trg_bloquer_changement_touite
+    BEFORE UPDATE OF idAuteur on TOUITE
+FOR EACH ROW
+    begin
+        if :NEW.idAuteur <> :Old.idAuteur then
+            RAISE_APPLICATION_ERROR(-20003,'Impossible de modifier l auteur d un touite.');
+        end if;
+    end;
+/
+
+CREATE OR REPLACE TRIGGER trg_limite_50_touite
+    BEFORE insert on TOUITE
+    for each row
+    DECLARE
+    v_total NUMBER;
+    BEGIN
+     select count(*) into v_total from TOUITE
+         where IDAUTEUR = :NEW.idAuteur
+        and TRUNC(DATEPUBLICATION) = trunc(sysdate);
+
+     if v_total >= 50 then RAISE_APPLICATION_ERROR(
+             -20004, 'Limite de 50 touites par jour depasser');
+    END IF;
+
+    end;
+/
