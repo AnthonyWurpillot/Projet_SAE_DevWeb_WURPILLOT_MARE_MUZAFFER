@@ -1,40 +1,43 @@
 <?php
-
 declare(strict_types=1);
 
-namespace iutnc\touiteur\action;
+namespace iutnc\touiteur\traitement;
 
-class ActionPublierTouite
+use iutnc\touiteur\repository\TouiteRepository;
+use iutnc\touiteur\repository\TagRepository;
+
+class PublierTouite
 {
-    private $touiteRepository;
+    private TouiteRepository $touiteRepository;
+    private TagRepository $tagRepository;
 
-    public function __construct($touiteRepository)
-    {
+    public function __construct(
+        TouiteRepository $touiteRepository,
+        TagRepository $tagRepository
+    ) {
         $this->touiteRepository = $touiteRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     public function execute($texte)
     {
         $texte = trim($texte);
 
-        // Vérifier que le touite n'est pas vide
         if ($texte === "") {
             throw new \Exception("Le touite ne peut pas être vide.");
         }
 
-        // Vérifier la longueur du touite
         if (mb_strlen($texte) > 235) {
             throw new \Exception("Le touite ne peut pas dépasser 235 caractères.");
         }
 
-        // Vérifier que l'utilisateur est connecté
         if (!isset($_SESSION['idUtilisateur'])) {
             throw new \Exception("Vous devez être connecté pour publier.");
         }
 
-        $idAuteur = $_SESSION['idUtilisateur'];
+        $idAuteur = (int) $_SESSION['idUtilisateur'];
 
-        // Extraire les hashtags
+        // Extraction des hashtags
         $tags = explode(" ", $texte);
 
         foreach ($tags as $i => $mot) {
@@ -47,10 +50,23 @@ class ActionPublierTouite
 
         $tags = array_unique($tags);
 
-        // Enregistrer le touite en base de données
+        // Création du touite
         $idTouite = $this->touiteRepository->create($texte, $idAuteur);
 
-        // Association des hashtags à implémenter plus tard
+        // Enregistrement des hashtags
+        foreach ($tags as $libelle) {
+
+            $idTag = $this->tagRepository->getTagByNom($libelle);
+
+            if ($idTag === null) {
+                $idTag = $this->tagRepository->createTag($libelle);
+            }
+
+            $this->tagRepository->associerTagAuTouite(
+                $idTouite,
+                $idTag
+            );
+        }
 
         return $idTouite;
     }
