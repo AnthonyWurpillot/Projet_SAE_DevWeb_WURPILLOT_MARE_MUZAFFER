@@ -53,6 +53,37 @@ return self::$instance;
 public function getPDO(): PDO {
 return $this->pdo;
 }
+
+public function create(string $texte, int $idAuteur): int {
+    $sql = "INSERT INTO Touite (texte, idAuteur)
+            VALUES (:texte, :idAuteur)";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([
+        'texte' => $texte,
+        'idAuteur' => $idAuteur
+    ]);
+
+    return (int) $this->pdo->lastInsertId();
+}
+
+
+public function suivreUtilisateur(int $idSuiveur, int $idSuivi): void
+{
+    $sql = "INSERT INTO Suivre (idSuiveur, idSuivi)
+            VALUES (:idSuiveur, :idSuivi)";
+
+    $stmt = $this->pdo->prepare($sql);
+
+    $stmt->execute([
+        'idSuiveur' => $idSuiveur,
+        'idSuivi' => $idSuivi
+    ]);
+}
+
+
+
 }
 
 /*driver=mysql

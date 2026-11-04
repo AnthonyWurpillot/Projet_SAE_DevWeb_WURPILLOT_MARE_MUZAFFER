@@ -1,4 +1,6 @@
 <?php
 
-namespace action\ActionAbonnementTag
+declare(strict_types=1);
+
+namespace iutnc\touiteur\action;
 

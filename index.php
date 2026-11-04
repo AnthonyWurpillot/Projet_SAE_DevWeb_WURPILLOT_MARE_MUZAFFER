@@ -17,5 +17,3 @@ echo "<h1 style='color:green;'>Connexion réussie à la base de données MySQL v
 echo "<h1 style='color:red;'>Erreur de connexion !</h1>";
 echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
 }
-
-

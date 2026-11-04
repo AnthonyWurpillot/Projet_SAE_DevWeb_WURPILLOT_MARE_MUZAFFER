@@ -1,33 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace iutnc\touiteur\action;
 
 class ActionSuivreUtilisateur
 {
-    private $suivreRepository;
+    private $touiteRepository;
 
-        public function __construct($suivreRepository)
-        {
-            $this->suivreRepository = $suivreRepository;
+    public function __construct($touiteRepository)
+    {
+        $this->touiteRepository = $touiteRepository;
+    }
+
+    public function execute($idUtilisateurASuivre)
+    {
+        // Vérifier que l'utilisateur est connecté
+        if (!isset($_SESSION['idUtilisateur'])) {
+            throw new \Exception("Vous devez être connecté pour suivre un utilisateur.");
         }
 
-            public function execute($idUtilisateurASuivre)
-            {
+        // Récupérer l'identifiant de l'utilisateur connecté
+        $idSuiveur = (int) $_SESSION['idUtilisateur'];
 
-               if(!ISSET($_SESSION['idutilisateur'])){
-               throw new \Exception("Vous devez être connecté pour publier.")};
+        // Vérifier l'identifiant de l'utilisateur à suivre
+        if (
+            $idUtilisateurASuivre === null ||
+            filter_var($idUtilisateurASuivre, FILTER_VALIDATE_INT) === false ||
+            (int) $idUtilisateurASuivre <= 0
+        ) {
+            throw new \Exception("Utilisateur introuvable.");
+        }
 
-               $idSuiveur = $_SESSION['idUtilisateur'];
+        $idUtilisateurASuivre = (int) $idUtilisateurASuivre;
 
-                if ($idUtilisateurASuivre === null || $idUtilisateurASuivre === '') {
-                           throw new \Exception("Utilisateur introuvable.");
-                       }
+        // Empêcher de se suivre soi-même
+        if ($idSuiveur === $idUtilisateurASuivre) {
+            throw new \Exception("Vous ne pouvez pas vous suivre vous-même.");
+        }
 
-                if ($idSuiveur == $idUtilisateurASuivre) {
-                     throw new \Exception("Vous ne pouvez pas vous suivre vous-même.");
-                }
+        // Enregistrer l'abonnement
+        $this->touiteRepository->suivreUtilisateur(
+            $idSuiveur,
+            $idUtilisateurASuivre
+        );
 
-
-                // Ajouter la relation dans la base de données
+        return true;
     }
 }
