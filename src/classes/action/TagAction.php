@@ -6,7 +6,7 @@ namespace iutnc\touiteur\action;
 use iutnc\touiteur\repository\TouiteRepository;
 use iutnc\touiteur\render\TweetShortRenderer;
 
-class TagAction
+class TagAction extends Action
 {
     private TouiteRepository $touiteRepository;
 
@@ -17,11 +17,11 @@ class TagAction
 
     public function execute(): string
     {
-        if (isset($_GET['tag'])) {
-            $libelle = $_GET['tag'];
-        } else {
-            $libelle = '';
-        }
+        $libelle = isset($_GET['tag']) && is_string($_GET['tag'])
+            ? trim($_GET['tag'])
+            : '';
+
+        $libelle = preg_replace('/^#+/', '', $libelle) ?? '';
 
         if ($libelle === '') {
             throw new \Exception("Aucun tag sélectionné.");
@@ -41,8 +41,11 @@ class TagAction
         $html .= "<section class='tweet-feed'>";
 
         foreach ($touites as $touite) {
-            $renderer = new TweetShortRenderer($touite);
-            $html .= $renderer->render();
+            $html .= (new TweetShortRenderer($touite))->render();
+        }
+
+        if ($touites === []) {
+            $html .= "<p>Aucun touite pour ce tag.</p>";
         }
 
         $html .= "</section>";

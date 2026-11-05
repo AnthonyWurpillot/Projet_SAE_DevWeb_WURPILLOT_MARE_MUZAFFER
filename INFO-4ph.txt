@@ -1,13 +1,6 @@
+Shémas et préparation de la BD, relation, clés (Anthony)
 
+Création de l'architecture de base (Dispatch, Repository, Action, autoload (Mouzaffer) 
 
-
-Shémas et préparation de la BD, relation, clés etc/ Anthony
-
-
-
-Architecture, Dessin et préparation de l'affichage html, css 
-Dispatch, Repertory, Action, autoload, action, index.php (Mouzaffer) 
-
-
-Interface (maquette) des différentes pages web (Axel)
+Interface (maquette) + html (Axel)
 

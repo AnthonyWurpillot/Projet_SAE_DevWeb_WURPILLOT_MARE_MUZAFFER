@@ -56,7 +56,7 @@ class PublierTouite
         // Enregistrement des hashtags
         foreach ($tags as $libelle) {
 
-            $idTag = $this->tagRepository->getTagByNom($libelle);
+            $idTag = $this->tagRepository->getTagIdByNom($libelle);
 
             if ($idTag === null) {
                 $idTag = $this->tagRepository->createTag($libelle);
