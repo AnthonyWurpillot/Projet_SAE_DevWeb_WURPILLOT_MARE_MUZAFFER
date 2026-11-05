@@ -29,7 +29,7 @@ try {
 
     echo "</body>";
     echo "</html>";
-    
+
 } catch (Exception $e) {
 
     echo "<h1>Une erreur est survenue</h1>";
