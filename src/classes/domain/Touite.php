@@ -1,6 +1,6 @@
 <?php
 
-namespace touiteur\domain;
+namespace iutnc\touiteur\domain;
 
 class Touite {
 private int $idTouite;
