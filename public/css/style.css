@@ -1,1 +1,515 @@
-fseqfsefes
+
+/*
+   1. REINITIALISATION ET STYLE GENERAL
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #E6ECF0;
+    color: #14171A;
+}
+
+
+/* Couleurs :
+   Bleu : #1DA1F2
+   Fond : #E6ECF0
+   Texte : #14171A
+   Texte secondaire : #657786
+   Bordures : #E1E8ED
+*/
+
+
+/* 
+   2. STRUCTURE GENERALE
+*/
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 250px 600px 300px;
+    gap: 25px;
+
+    align-items: start;
+    min-height: calc(100vh - 55px);
+}
+
+
+/*
+   3. BARRE SUPERIEURE
+*/
+
+.top-bar {
+    height: 55px;
+    width: 100%;
+
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E1E8ED;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-bar h1 {
+    font-size: 20px;
+    color: #1DA1F2;
+    font-weight: bold;
+}
+
+
+/*
+   4. MENU DE GAUCHE
+*/
+
+.sidebar-left {
+    padding-top: 20px;
+}
+
+.main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-link {
+    display: block;
+    padding: 15px 20px;
+
+    border-radius: 25px;
+    text-decoration: none;
+
+    color: #14171A;
+    font-size: 18px;
+    font-weight: bold;
+
+    transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #D8EAF5;
+    color: #1DA1F2;
+}
+
+.nav-link.active {
+    color: #1DA1F2;
+}
+
+
+/*
+   5. CONTENU CENTRAL
+*/
+
+.main-content {
+    background-color: #FFFFFF;
+
+    min-height: calc(100vh - 55px);
+
+    border-left: 1px solid #E1E8ED;
+    border-right: 1px solid #E1E8ED;
+}
+
+.main-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid #E1E8ED;
+}
+
+.main-header h1 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+/*
+   6. MENU DE DROITE
+*/
+
+.sidebar-right {
+    padding-top: 20px;
+}
+
+.tag-subscription {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.tag-subscription h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.tag-subscription form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tag-subscription input {
+    width: 100%;
+    padding: 12px;
+
+    border: 1px solid #E1E8ED;
+    border-radius: 25px;
+
+    font-size: 14px;
+    outline: none;
+}
+
+.tag-subscription input:focus {
+    border-color: #1DA1F2;
+}
+
+.tag-subscription button {
+    padding: 12px;
+
+    background-color: #1DA1F2;
+    color: #FFFFFF;
+
+    border: none;
+    border-radius: 25px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tag-subscription button:hover {
+    background-color: #0C85D0;
+}
+
+
+/*
+   7. FORMULAIRE DE PUBLICATION
+*/
+
+.tweet-composer {
+    padding: 20px;
+
+    background-color: #FFFFFF;
+    border-bottom: 10px solid #E6ECF0;
+}
+
+.tweet-composer textarea {
+    width: 100%;
+    resize: vertical;
+
+    border: none;
+    outline: none;
+
+    font-family: inherit;
+    font-size: 16px;
+
+    color: #14171A;
+    padding: 10px 0;
+}
+
+.tweet-composer textarea::placeholder {
+    color: #657786;
+}
+
+.composer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 10px;
+}
+
+.attachment-button {
+    color: #1DA1F2;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.attachment-button:hover {
+    color: #0C85D0;
+}
+
+.publish-button {
+    background-color: #1DA1F2;
+    color: #FFFFFF;
+
+    border: none;
+    border-radius: 25px;
+
+    padding: 10px 20px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.publish-button:hover {
+    background-color: #0C85D0;
+}
+
+
+/*
+   8. FEED ET TOUITES COURTS
+*/
+
+.tweet-feed {
+    display: flex;
+    flex-direction: column;
+}
+
+.tweet {
+    background-color: #FFFFFF;
+    padding: 18px 20px;
+
+    border-bottom: 1px solid #E1E8ED;
+
+    transition: background-color 0.2s;
+}
+
+.tweet:hover {
+    background-color: #F5F8FA;
+}
+
+.tweet-header {
+    margin-bottom: 10px;
+}
+
+.tweet-author {
+    font-size: 15px;
+    font-weight: bold;
+    color: #14171A;
+}
+
+.tweet-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #14171A;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.tweet-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 12px;
+}
+
+.view-tweet {
+    color: #1DA1F2;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+.view-tweet:hover {
+    text-decoration: underline;
+}
+
+
+/*
+   9. PROFIL UTILISATEUR
+*/
+
+.user-profile {
+    padding: 30px;
+    border-bottom: 10px solid #E6ECF0;
+}
+
+.user-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-profile-header h2 {
+    font-size: 26px;
+    color: #14171A;
+}
+
+.follow-button {
+    background-color: #1DA1F2;
+    color: #FFFFFF;
+
+    border: none;
+    border-radius: 25px;
+
+    padding: 10px 22px;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.follow-button:hover {
+    background-color: #0C85D0;
+}
+
+
+/*
+   10. PAGE TAG
+*/
+
+.tag-header {
+    padding: 25px 20px;
+
+    background-color: #FFFFFF;
+    border-bottom: 10px solid #E6ECF0;
+}
+
+.tag-header h2 {
+    color: #14171A;
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.tag-header p {
+    color: #657786;
+    font-size: 14px;
+}
+
+
+/*
+   11. DETAIL D'UN TOUITE
+*/
+
+.tweet-detail {
+    background-color: #FFFFFF;
+    padding: 25px 20px;
+}
+
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+.detail-text {
+    font-size: 16px;
+    line-height: 1.35;
+
+    color: #14171A;
+
+    overflow-wrap: anywhere;
+    white-space: pre-line;
+
+    margin-bottom: 18px;
+}
+
+.detail-image {
+    margin-bottom: 20px;
+}
+
+.detail-image img {
+    display: block;
+    width: 100%;
+    max-height: 350px;
+
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-top: 1px solid #E1E8ED;
+    padding-top: 18px;
+}
+
+.vote-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vote-button {
+    background: none;
+    border: none;
+
+    color: #657786;
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.vote-button:hover {
+    color: #1DA1F2;
+}
+
+.tweet-score {
+    font-weight: bold;
+    font-size: 16px;
+    color: #14171A;
+}
+
+.tweet-date {
+    font-size: 13px;
+    color: #657786;
+}
+
+
+/*
+   12. RESPONSIVE
+*/
+
+/* Tablettes */
+
+@media screen and (max-width: 1100px) {
+
+    .container {
+        grid-template-columns: 180px minmax(0, 600px);
+        justify-content: center;
+    }
+
+    .sidebar-right {
+        display: none;
+    }
+
+}
+
+
+/* Mobiles */
+
+@media screen and (max-width: 750px) {
+
+    .container {
+        display: block;
+    }
+
+    .sidebar-left {
+        padding: 10px;
+    }
+
+    .main-nav {
+        flex-direction: row;
+    }
+
+    .nav-link {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+}
