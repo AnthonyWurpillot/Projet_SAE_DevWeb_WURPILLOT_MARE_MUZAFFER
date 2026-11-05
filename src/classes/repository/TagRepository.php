@@ -14,20 +14,20 @@ class TagRepository
         $this->pdo = Database::getPDO();
     }
 
-    public function getTagByNom(string $libelle): ?int
+    public function getTagIdByNom(string $libelle): ?int
     {
-        $sql = "SELECT idTag
-                FROM Tag
-                WHERE libelle = :libelle";
+        $sql = "SELECT idTag FROM Tag WHERE libelle = :libelle";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([
-            'libelle' => $libelle
-        ]);
+        $stmt->execute(['libelle' => $libelle]);
 
-        $idTag = $stmt->fetchColumn();
+        $resultat = $stmt->fetch();
 
-        return $idTag !== false ? (int) $idTag : null;
+        if ($resultat === false) {
+            return null;
+        }
+
+        return (int) $resultat['idTag'];
     }
 
     public function createTag(string $libelle): int
@@ -54,4 +54,33 @@ class TagRepository
             'idTag' => $idTag
         ]);
     }
+    public function abonnerTag(int $idUtilisateur, int $idTag): void
+    {
+        $sql = "INSERT INTO Abonnement_Tag (idUtilisateur, idTag)
+            VALUES (:idUtilisateur, :idTag)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            'idUtilisateur' => $idUtilisateur,
+            'idTag' => $idTag
+        ]);
+    }
+
+    public function estAbonneAuTag(int $idUtilisateur, int $idTag): bool
+    {
+        $sql = "SELECT * FROM Abonnement_Tag
+            WHERE idUtilisateur = :idUtilisateur
+            AND idTag = :idTag";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            'idUtilisateur' => $idUtilisateur,
+            'idTag' => $idTag
+        ]);
+
+        return $stmt->fetch() !== false;
+    }
+
 }
