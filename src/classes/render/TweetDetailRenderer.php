@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace iutnc\touiteur\render;
 
-use iutnc\touiteur\domain\Tag;
 use iutnc\touiteur\domain\Touite;
 
 class TweetDetailRenderer
@@ -80,11 +79,6 @@ class TweetDetailRenderer
     {
         $texteHtml = htmlspecialchars($texte, ENT_QUOTES, 'UTF-8');
         $tags = $this->touite->getTags();
-
-        usort(
-            $tags,
-            fn(Tag $a, Tag $b) => mb_strlen($b->getLibelle()) <=> mb_strlen($a->getLibelle())
-        );
 
         foreach ($tags as $tag) {
             $libelle = $tag->getLibelle();

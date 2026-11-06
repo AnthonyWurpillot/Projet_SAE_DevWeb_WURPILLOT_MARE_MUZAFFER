@@ -7,16 +7,16 @@ namespace iutnc\touiteur\domain;
 class Utilisateur {
 private int $idUtilisateur;
 private string $pseudo;
-private string $nom;
-private string $prenom;
+private ?string $nom;
+private ?string $prenom;
 private string $email;
 private int $nbTouites;
 
 public function __construct(
 int $idUtilisateur,
 string $pseudo,
-string $nom,
-string $prenom,
+?string $nom,
+?string $prenom,
 string $email,
 int $nbTouites = 0
 ) {
@@ -37,11 +37,11 @@ public function getPseudo(): string {
 return $this->pseudo;
 }
 
-public function getNom(): string {
+public function getNom(): ?string {
 return $this->nom;
 }
 
-public function getPrenom(): string {
+public function getPrenom(): ?string {
 return $this->prenom;
 }
 
