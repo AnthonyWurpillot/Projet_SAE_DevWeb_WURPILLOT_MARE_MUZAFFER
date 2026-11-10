@@ -182,6 +182,21 @@ class TouiteRepository
         return $collection;
     }
 
+    public function voter(int $idUtilisateur, int $idTouite, int $valeur): void
+    {
+        $sql = "INSERT INTO Note (idUtilisateur, idTouite, valeur)
+                VALUES (:idUtilisateur, :idTouite, :valeur)
+                ON DUPLICATE KEY UPDATE valeur = :valeurMaj";
+
+                $stmt = $this->pdo->prepare($sql);
+                $stmt->execute([
+                    'idUtilisateur' => $idUtilisateur,
+                    'idTouite' => $idTouite,
+                    'valeur' => $valeur,
+                    'valeurMaj' => $valeur
+                ]);
+    }
+
     private function creerTouiteDepuisLigne(array $ligne): Touite
     {
         $touite = new Touite(
