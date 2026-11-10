@@ -67,20 +67,19 @@ class TagRepository
         ]);
     }
 
-    public function estAbonneAuTag(int $idUtilisateur, int $idTag): bool
-    {
-        $sql = "SELECT * FROM Abonnement_Tag
+public function estAbonneAuTag(int $idUtilisateur, int $idTag):  bool
+{
+    $sql = "SELECT 1 FROM Abonnement_Tag
             WHERE idUtilisateur = :idUtilisateur
             AND idTag = :idTag";
 
-        $stmt = $this->pdo->prepare($sql);
+            $stmt = $this->pdo->prepare($sql);
 
-        $stmt->execute([
-            'idUtilisateur' => $idUtilisateur,
-            'idTag' => $idTag
-        ]);
+            $stmt->execute([
+                 'idUtilisateur' => $idUtilisateur,
+                 'idTag' => $idTag
+            ]);
 
-        return $stmt->fetch() !== false;
-    }
-
-}
+            return $stmt->fetch() !==false;
+            }
+        }
