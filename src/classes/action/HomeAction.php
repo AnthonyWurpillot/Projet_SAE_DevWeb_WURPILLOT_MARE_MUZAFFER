@@ -32,7 +32,7 @@ class HomeAction extends Action
         $html .= "<h1>Accueil</h1>";
         $html .= "</header>";
 
-        $html .= (new TweetFormRenderer())->render();
+        $html .= (new TweetFormRenderer('?action=home'))->render();
 
         $html .= "<section class='tweet-feed'>";
 

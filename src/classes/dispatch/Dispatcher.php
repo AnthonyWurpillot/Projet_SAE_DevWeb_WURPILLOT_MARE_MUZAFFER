@@ -15,6 +15,8 @@ use iutnc\touiteur\action\InfluenceursAction;
 use iutnc\touiteur\action\TagAction;
 
 use iutnc\touiteur\traitement\PublierTouite;
+use iutnc\touiteur\traitement\SuivreUtilisateur;
+use iutnc\touiteur\traitement\AbonnerTag;
 
 class Dispatcher
 {
@@ -27,7 +29,7 @@ class Dispatcher
     public function __construct()
     {
 
-    $this->action = $_GET['action']?? 'home';
+    $this->action = $_GET['action'] ?? 'home';
     $this->touiteRepo = new TouiteRepository();
     $this->utilisateurRepo = new UtilisateurRepository();
     $this->tagRepo = new TagRepository();
@@ -47,18 +49,40 @@ class Dispatcher
                     $this->tagRepo
                 );
                 $publierService->execute($_POST['text'] ?? '');
+                header('Location: ' . $this->redirectUrl());
+                exit;
             }
+            $actionObj = new HomeAction($this->touiteRepo);
+            break;
 
-        header('Location: ?action=home');
-        exit;
+        case 'suivre':
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                (new SuivreUtilisateur($this->utilisateurRepo))
+                    ->execute($_POST['idUtilisateur'] ?? null);
+                header('Location: ' . $this->redirectUrl());
+                exit;
+            }
+            $actionObj = new HomeAction($this->touiteRepo);
+            break;
+
+        case 'abonnerTag':
+            if($_SERVER['REQUEST_METHOD'] === 'POST') {
+                (new AbonnerTag($this->tagRepo))
+                    ->execute($_POST['tag'] ?? '');
+                header('Location: ' . $this->redirectUrl());
+                exit;
+            }
+            $actionObj = new HomeAction($this->touiteRepo);
+            break;
+
+        case 'noter':
+            throw new \Exception("Fonctionnalité à venir.");
 
         case'explore':
-        $actionObj = new ExploreAction($this->touiteRepo);
-        break;
+            $actionObj = new ExploreAction($this->touiteRepo);
+            break;
 
         case 'tweet':
-        case 'detail':
-        case 'detail':
             $actionObj = new TouiteDetailAction($this->touiteRepo);
             break;
 
@@ -94,8 +118,31 @@ class Dispatcher
 
     }
 
+    private function redirectUrl(): string
+    {
+        $redirect = $_POST['redirect'] ?? '';
+
+        if (!is_string($redirect) || !str_starts_with($redirect, '?action=')) {
+            return '?action=home';
+        }
+
+        $actionRedirect = explode('&', substr($redirect, 8))[0];
+
+        $actionsAutorisees = ['home', 'explore', 'tweet', 'user', 'tag', 'influenceurs'];
+
+        if (in_array($actionRedirect, $actionsAutorisees, true)) {
+            return $redirect;
+        } else {
+            return '?action=home';
+        }
+    }
+
     private function renderPage(string $html): void
     {
+
+    $navHome = $this->action === 'home' ? ' active' : '';
+    $navExplore = $this->action === 'explore' ? ' active' : '';
+    $navInfluenceurs = $this->action === 'influenceurs' ? ' active' : '';
 
     echo <<<HTML
 
@@ -105,25 +152,36 @@ class Dispatcher
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Touiteur</title>
+    <link rel="stylesheet" href="public/css/style.css">
 </head>
-<body style="font-family: sans-serif; max-width: 650px; margin: 20px auto; line-height: 1.5;">
-    <header class="app-header">
-        <nav style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <a href="?action=home">Accueil</a> |
-            <a href="?action=explore">Explorer</a> |
-            <a href="?action=influenceurs">Influenceurs</a>
-        </nav>
-        <hr>
+<body>
+    <header class="top-bar">
+        <h1>Touiteur</h1>
     </header>
 
-    <main class="main-content">
-        {$html}
-    </main>
+    <div class="container">
+        <aside class="sidebar-left">
+            <nav class="main-nav">
+                <a href="?action=home" class="nav-link{$navHome}">Accueil</a>
+                <a href="?action=explore" class="nav-link{$navExplore}">Explorer</a>
+                <a href="?action=influenceurs" class="nav-link{$navInfluenceurs}">Influenceurs</a>
+            </nav>
+        </aside>
 
-    <footer>
-        <hr>
-        <p>&copy; Touiteur</p>
-    </footer>
+        <main class="main-content">
+            {$html}
+        </main>
+
+        <aside class="sidebar-right">
+            <div class="tag-subscription">
+                <h2>Suivre un tag</h2>
+                <form method="post" action="?action=abonnerTag">
+                    <input type="text" name="tag" placeholder="#informatique" required>
+                    <button type="submit">S'abonner</button>
+                </form>
+            </div>
+        </aside>
+    </div>
 </body>
 </html>
 HTML;

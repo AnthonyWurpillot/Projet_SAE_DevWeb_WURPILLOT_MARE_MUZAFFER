@@ -19,6 +19,7 @@ class TweetDetailRenderer
     public function render(): string
     {
         $html = "<article class='tweet-detail'>";
+        $redirect = htmlspecialchars("?action=tweet&id=" . $this->touite->getIdTouite());
 
         $html .= "<div class='detail-header'>";
         $html .= "<span class='tweet-author'>";
@@ -28,6 +29,7 @@ class TweetDetailRenderer
         $html .= "</span>";
         $html .= "<form method='post' action='?action=suivre' style='display:contents'>";
         $html .= "<input type='hidden' name='idUtilisateur' value='" . $this->touite->getIdAuteur() . "'>";
+        $html .= "<input type='hidden' name='redirect' value='" . $redirect . "'>";
         $html .= "<button type='submit' class='follow-button'>Suivre</button>";
         $html .= "</form>";
         $html .= "</div>";
@@ -47,13 +49,15 @@ class TweetDetailRenderer
         $html .= "<form method='post' action='?action=noter' style='display:contents'>";
         $html .= "<input type='hidden' name='idTouite' value='" . $this->touite->getIdTouite() . "'>";
         $html .= "<input type='hidden' name='valeur' value='1'>";
-        $html .= "<button type='submit' class='vote-button' aria-label='Upvote'>▲</button>";
+        $html .= "<input type='hidden' name='redirect' value='" . $redirect . "'>";
+        $html .= "<button type='submit' class='vote-button' title='Upvote'>▲</button>";
         $html .= "</form>";
         $html .= "<span class='tweet-score'>" . $this->touite->getScore() . "</span>";
         $html .= "<form method='post' action='?action=noter' style='display:contents'>";
         $html .= "<input type='hidden' name='idTouite' value='" . $this->touite->getIdTouite() . "'>";
         $html .= "<input type='hidden' name='valeur' value='-1'>";
-        $html .= "<button type='submit' class='vote-button' aria-label='Downvote'>▼</button>";
+        $html .= "<input type='hidden' name='redirect' value='" . $redirect . "'>";
+        $html .= "<button type='submit' class='vote-button' title='Downvote'>▼</button>";
         $html .= "</form>";
         $html .= "</div>";
         $html .= "<div class='tweet-date'>" . $this->formaterDate($this->touite->getDatePublication()) . "</div>";

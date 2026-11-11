@@ -5,15 +5,14 @@ session_start();
 
 require_once 'vendor/autoload.php';
 
-use iutnc\touiteur\repository\TouiteRepository;
+use iutnc\touiteur\repository\Database;
+use iutnc\touiteur\dispatch\Dispatcher;
 
 try {
-TouiteRepository::setConfig('config/db.config.ini');
-$repo = TouiteRepository::getInstance();
-$pdo = $repo->getPDO();
+    Database::setConfig('config/db.config.ini');
+    (new Dispatcher())->run();
 
-echo "<h1 style='color:green;'>Connexion réussie à la base de données MySQL via TouiteRepository !</h1>";
-} catch (\Exception $e) {
-echo "<h1 style='color:red;'>Erreur de connexion !</h1>";
-echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
+} catch (Throwable $e) {
+    echo "<h1>Une erreur est survenue</h1>";
+    echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
 }

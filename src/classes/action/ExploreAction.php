@@ -24,7 +24,7 @@ class ExploreAction extends Action
         $html .= "<h1>Explorer</h1>";
         $html .= "</header>";
 
-        $html .= (new TweetFormRenderer())->render();
+        $html .= (new TweetFormRenderer('?action=explore'))->render();
 
         $html .= "<section class='tweet-feed'>";
 

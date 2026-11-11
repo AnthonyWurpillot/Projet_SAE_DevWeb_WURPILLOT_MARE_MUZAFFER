@@ -43,10 +43,12 @@ class UserPageAction extends Action
         $html .= "</header>";
 
         $html .= "<section class='user-profile'>";
+        $redirect = htmlspecialchars("?action=user&id=" . $id);
         $html .= "<div class='user-profile-header'>";
         $html .= "<h2>@" . htmlspecialchars($utilisateur->getPseudo()) . "</h2>";
         $html .= "<form method='post' action='?action=suivre' style='display:contents'>";
         $html .= "<input type='hidden' name='idUtilisateur' value='" . $utilisateur->getIdUtilisateur() . "'>";
+        $html .= "<input type='hidden' name='redirect' value='" . $redirect . "'>";
         $html .= "<button type='submit' class='follow-button'>Suivre</button>";
         $html .= "</form>";
         $html .= "</div>";
