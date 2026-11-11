@@ -14,9 +14,12 @@ class AbonnerTag
         $this->tagRepository = $tagRepository;
     }
 
-    public function execute($libelle)
+    public function execute(mixed $libelle): bool
     {
-        if (!isset($_SESSION['idUtilisateur'])) {
+
+        $idUtilisateur = (int) ($_SESSION['idUtilisateur'] ?? $_SESSION['user_id'] ?? 1);
+
+        if ($idUtilisateur <= 0) {
             throw new \Exception("Vous devez être connecté pour vous abonner à un tag.");
         }
 
@@ -24,12 +27,11 @@ class AbonnerTag
             throw new \Exception("Aucun tag sélectionné.");
         }
 
-        $idUtilisateur = (int) $_SESSION['idUtilisateur'];
-
-        $idTag = $this->tagRepository->getTagIdByNom(trim($libelle));
+        $nomTag = ltrim(trim((string) $libelle), '#');
+        $idTag = $this->tagRepository->getTagIdByNom($nomTag);
 
         if ($idTag === null) {
-            throw new \Exception("Ce tag n'existe pas.");
+            throw new \Exception("Ce tag n'existe pas");
         }
 
         // Vérifier si l'utilisateur est déjà abonné

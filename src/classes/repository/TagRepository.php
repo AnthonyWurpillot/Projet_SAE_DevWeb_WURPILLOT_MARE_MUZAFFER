@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace iutnc\touiteur\repository;
 
 use PDO;
+use iutnc\touiteur\db\Database;
 
 class TagRepository
 {
@@ -45,7 +46,7 @@ class TagRepository
 
     public function associerTagAuTouite(int $idTouite, int $idTag): void
     {
-        $sql = "INSERT INTO Touite_Tag (idTouite, idTag)
+        $sql = "INSERT IGNORE INTO Touite_Tag (idTouite, idTag)
                 VALUES (:idTouite, :idTag)";
 
         $stmt = $this->pdo->prepare($sql);
@@ -56,7 +57,7 @@ class TagRepository
     }
     public function abonnerTag(int $idUtilisateur, int $idTag): void
     {
-        $sql = "INSERT INTO Abonnement_Tag (idUtilisateur, idTag)
+        $sql = "INSERT IGNORE INTO Abonnement_Tag (idUtilisateur, idTag)
             VALUES (:idUtilisateur, :idTag)";
 
         $stmt = $this->pdo->prepare($sql);
