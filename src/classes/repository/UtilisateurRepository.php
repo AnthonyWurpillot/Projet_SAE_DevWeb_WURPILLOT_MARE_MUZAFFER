@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace iutnc\touiteur\repository;
 
 use PDO;
+use iutnc\touiteur\db\Database;
 use iutnc\touiteur\domain\Utilisateur;
 
 class UtilisateurRepository
@@ -17,7 +18,7 @@ class UtilisateurRepository
 
     public function suivreUtilisateur(int $idSuiveur, int $idSuivi): void
     {
-        $sql = "INSERT INTO Suivre (idSuiveur, idSuivi)
+        $sql = "INSERT IGNORE INTO Suivre (idSuiveur, idSuivi)
                 VALUES (:idSuiveur, :idSuivi)";
 
         $stmt = $this->pdo->prepare($sql);

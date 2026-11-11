@@ -14,13 +14,14 @@ class SuivreUtilisateur
         $this->utilisateurRepository = $utilisateurRepository;
     }
 
-    public function execute($idUtilisateurASuivre)
+    public function execute(mixed $idUtilisateurASuivre): bool
     {
-        if (!isset($_SESSION['idUtilisateur'])) {
+
+        $idSuiveur = (int) ($_SESSION['idUtilisateur'] ?? $_SESSION['user_id'] ?? 1);
+
+        if ($idSuiveur <= 0) {
             throw new \Exception("Vous devez être connecté pour suivre un utilisateur.");
         }
-
-        $idSuiveur = (int) $_SESSION['idUtilisateur'];
 
         if ($idUtilisateurASuivre === null || (int) $idUtilisateurASuivre <= 0) {
             throw new \Exception("Utilisateur introuvable.");
