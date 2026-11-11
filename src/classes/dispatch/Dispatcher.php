@@ -17,6 +17,7 @@ use iutnc\touiteur\action\TagAction;
 use iutnc\touiteur\traitement\PublierTouite;
 use iutnc\touiteur\traitement\SuivreUtilisateur;
 use iutnc\touiteur\traitement\AbonnerTag;
+use iutnc\touiteur\traitement\NoterTouite;
 
 class Dispatcher
 {
@@ -76,7 +77,19 @@ class Dispatcher
             break;
 
         case 'noter':
-            throw new \Exception("Fonctionnalité à venir.");
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $idTouite = (int)($_POST['id'] ?? $_POST['id_touite'] ?? 0);
+                $valeur = (int)($_POST['valeur'] ?? 0);
+                $idUser = (int)($_SESSION['user_id'] ?? 1);
+
+                $noterService = new NoterTouite($this->touiteRepo);
+                $noterService->execute($idTouite, $idUser, $valeur);
+
+                header("Location: ?action=tweet&id={$idTouite}");
+                exit;
+            }
+            header('Location: ?action=home');
+            exit;
 
         case'explore':
             $actionObj = new ExploreAction($this->touiteRepo);
