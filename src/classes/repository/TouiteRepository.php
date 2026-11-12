@@ -59,7 +59,7 @@ class TouiteRepository
                 LEFT JOIN Note n
                     On t.idTouite = n.idTouite
                 GROUP BY t.idTouite, t.texte, t.datePublication, t.idAuteur, u.pseudo
-                ORDER BY t.datePublication DESC, t.idTouite DESC";
+                ORDER BY t.datePublication DESC";
 
         $stmt = $this->pdo->query($sql);
         $lignes = $stmt->fetchAll();
@@ -252,7 +252,6 @@ class TouiteRepository
         }
     }
 
-
     public function trouverImage(int $idTouite): ?string
     {
         $sql = "SELECT chemin
@@ -272,8 +271,6 @@ class TouiteRepository
 
         return $image;
     }
-
-
 }
 
 

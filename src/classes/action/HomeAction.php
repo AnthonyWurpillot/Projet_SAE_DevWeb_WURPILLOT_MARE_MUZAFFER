@@ -37,11 +37,7 @@ class HomeAction extends Action
         $html .= "<section class='tweet-feed'>";
 
         foreach ($touites as $touite) {
-            $image = $this->touiteRepository->trouverImage(
-                $touite->getIdTouite()
-            );
-
-            $html .= (new TweetShortRenderer($touite, $image))->render();
+            $html .= (new TweetShortRenderer($touite))->render();
         }
 
         if ($touites === []) {

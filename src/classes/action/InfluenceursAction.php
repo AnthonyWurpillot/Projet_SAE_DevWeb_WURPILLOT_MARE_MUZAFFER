@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\touiteur\dispatch;
+namespace iutnc\touiteur\action;
 
-use iutnc\touiteur\action\Action;
-use iutnc\touiteur\render\InfluenceurRenderer;
 use iutnc\touiteur\repository\UtilisateurRepository;
+use iutnc\touiteur\render\InfluenceurRenderer;
 
 class InfluenceursAction extends Action
 {

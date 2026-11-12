@@ -19,7 +19,8 @@ class PublierTouite
         $this->tagRepository = $tagRepository;
     }
 
-    public function execute(string $texte, ?array $image = null): int    {
+    public function execute(string $texte, ?array $image = null): int
+    {
         $texte = trim($texte);
 
         if ($texte === "") {
@@ -68,8 +69,17 @@ class PublierTouite
         }
 
         // Extraction des hashtags
-        preg_match_all('/#([\p{L}\p{N}_]+)/u', $texte, $resultat);
-        $tags = array_unique($resultat[1]);
+        $tags = explode(" ", $texte);
+
+        foreach ($tags as $i => $mot) {
+            if (str_starts_with($mot, "#")) {
+                $tags[$i] = substr($mot, 1);
+            } else {
+                unset($tags[$i]);
+            }
+        }
+
+        $tags = array_unique($tags);
 
         // Création du touite
         $idTouite = $this->touiteRepository->create($texte, $idAuteur);
