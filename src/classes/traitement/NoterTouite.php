@@ -22,12 +22,12 @@ class NoterTouite
 
         }
 
-        if (!in_array($valeur, [1, -1, 0], true)) {
+        if (!in_array($valeur, [1, -1], true)) {
             throw new \InvalidArgumentException("Valeur de note non autorisée.");
 
         }
 
-        $this->touiteRepo->voter($idTouite, $idUser, $valeur);
+        $this->touiteRepo->voter($idUser, $idTouite, $valeur);
 
         }
     }

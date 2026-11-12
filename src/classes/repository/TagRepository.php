@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace iutnc\touiteur\repository;
 
 use PDO;
-use iutnc\touiteur\db\Database;
 
 class TagRepository
 {

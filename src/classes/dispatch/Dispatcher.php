@@ -53,8 +53,8 @@ class Dispatcher
                 header('Location: ' . $this->redirectUrl());
                 exit;
             }
-            $actionObj = new HomeAction($this->touiteRepo);
-            break;
+            header('Location: ?action=home');
+            exit;
 
         case 'suivre':
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -63,8 +63,8 @@ class Dispatcher
                 header('Location: ' . $this->redirectUrl());
                 exit;
             }
-            $actionObj = new HomeAction($this->touiteRepo);
-            break;
+            header('Location: ?action=home');
+            exit;
 
         case 'abonnerTag':
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -73,14 +73,14 @@ class Dispatcher
                 header('Location: ' . $this->redirectUrl());
                 exit;
             }
-            $actionObj = new HomeAction($this->touiteRepo);
-            break;
+            header('Location: ?action=home');
+            exit;
 
         case 'noter':
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $idTouite = (int)($_POST['id'] ?? $_POST['id_touite'] ?? 0);
+                $idTouite = (int)($_POST['idTouite'] ?? 0);
                 $valeur = (int)($_POST['valeur'] ?? 0);
-                $idUser = (int)($_SESSION['user_id'] ?? 1);
+                $idUser = (int)($_SESSION['idUtilisateur'] ?? 0);
 
                 $noterService = new NoterTouite($this->touiteRepo);
                 $noterService->execute($idTouite, $idUser, $valeur);
