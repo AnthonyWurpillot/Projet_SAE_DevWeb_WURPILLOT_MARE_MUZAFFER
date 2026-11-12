@@ -466,32 +466,83 @@ body {
     color: #657786;
 }
 
-
 /*
-   12. PORTAIL DE CONNEXION
+   12. IMAGES DES TOUITES
 */
 
-.login-portal {
-    padding: 30px;
-}
-
-.login-portal > p {
-    color: #657786;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-.login-portal form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-button.nav-link {
-    background: none;
-    border: none;
+.tweet-image {
+    margin-top: 12px;
     width: 100%;
-    text-align: left;
-    font-family: inherit;
+}
+
+.tweet-image img {
+    display: block;
+    width: 100%;
+    max-height: 500px;
+    height: auto;
+
+    object-fit: contain;
+    object-position: center;
+
+    background-color: #F5F8FA;
+    border-radius: 12px;
+}
+
+/*
+   13. APERCU DE L'IMAGE AVANT PUBLICATION
+*/
+
+.image-preview {
+    margin-top: 15px;
+    padding: 12px;
+
+    background-color: #F5F8FA;
+    border: 1px solid #E1E8ED;
+    border-radius: 12px;
+}
+
+.image-preview img {
+    display: block;
+    max-width: 100%;
+    max-height: 300px;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+    margin: 0 auto;
+
+    border-radius: 8px;
+}
+
+.preview-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 10px;
+
+    font-size: 13px;
+    color: #657786;
+}
+
+#image-name {
+    overflow-wrap: anywhere;
+}
+
+#remove-image {
+    border: none;
+    background: none;
+
+    color: #E0245E;
+    font-weight: bold;
+
     cursor: pointer;
 }
+
+#remove-image:hover {
+    text-decoration: underline;
+}
+
+

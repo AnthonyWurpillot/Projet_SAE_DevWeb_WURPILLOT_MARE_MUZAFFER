@@ -31,6 +31,23 @@ class TouiteRepository
         return (int) $this->pdo->lastInsertId();
     }
 
+    public function ajouterImage(
+        string $chemin,
+        ?string $description,
+        int $idTouite
+    ): void {
+        $sql = "INSERT INTO Image (chemin, description, idTouite)
+            VALUES (:chemin, :description, :idTouite)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute([
+            'chemin' => $chemin,
+            'description' => $description,
+            'idTouite' => $idTouite
+        ]);
+    }
+
     public function findAllTouites(): array
     {
         $sql = "SELECT t.idTouite, t.texte, t.datePublication,
@@ -42,7 +59,7 @@ class TouiteRepository
                 LEFT JOIN Note n
                     On t.idTouite = n.idTouite
                 GROUP BY t.idTouite, t.texte, t.datePublication, t.idAuteur, u.pseudo
-                ORDER BY t.datePublication DESC";
+                ORDER BY t.datePublication DESC, t.idTouite DESC";
 
         $stmt = $this->pdo->query($sql);
         $lignes = $stmt->fetchAll();
@@ -234,6 +251,29 @@ class TouiteRepository
             $touite->addTag($tag);
         }
     }
+
+
+    public function trouverImage(int $idTouite): ?string
+    {
+        $sql = "SELECT chemin
+            FROM Image
+            WHERE idTouite = :idTouite";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'idTouite' => $idTouite
+        ]);
+
+        $image = $stmt->fetchColumn();
+
+        if ($image === false) {
+            return null;
+        }
+
+        return $image;
+    }
+
+
 }
 
 

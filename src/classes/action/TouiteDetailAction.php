@@ -35,7 +35,9 @@ class TouiteDetailAction extends Action
         $html .= "<h1>Touite</h1>";
         $html .= "</header>";
 
-        $html .= (new TweetDetailRenderer($touite))->render();
+        $image = $this->touiteRepository->trouverImage($id);
+
+        $html .= (new TweetDetailRenderer($touite, $image))->render();
 
         return $html;
     }

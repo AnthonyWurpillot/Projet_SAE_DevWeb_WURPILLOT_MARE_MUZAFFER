@@ -8,10 +8,12 @@ use iutnc\touiteur\domain\Touite;
 class TweetShortRenderer
 {
     private Touite $touite;
+    private ?string $image;
 
-    public function __construct(Touite $touite)
+    public function __construct(Touite $touite, ?string $image = null)
     {
         $this->touite = $touite;
+        $this->image = $image;
     }
 
     public function render(): string
@@ -29,6 +31,11 @@ class TweetShortRenderer
         $html .= "<p class='tweet-text'>";
         $html .= $this->rendreTexteAvecTags($this->touite->getTexte());
         $html .= "</p>";
+        if ($this->image !== null && $this->image !== '') {
+            $html .= "<div class='tweet-image'>";
+            $html .= "<img src='" . htmlspecialchars($this->image, ENT_QUOTES, 'UTF-8') . "' alt='Image du touite'>";
+            $html .= "</div>";
+        }
 
         $html .= "<div class='tweet-footer'>";
         $html .= "<a href='?action=tweet&amp;id=" . $this->touite->getIdTouite() . "' class='view-tweet'>";
