@@ -17,7 +17,7 @@ class SuivreUtilisateur
     public function execute(mixed $idUtilisateurASuivre): bool
     {
 
-        $idSuiveur = (int) ($_SESSION['idUtilisateur'] ?? $_SESSION['user_id'] ?? 1);
+        $idSuiveur = (int) ($_SESSION['idUtilisateur'] ?? 0);
 
         if ($idSuiveur <= 0) {
             throw new \Exception("Vous devez être connecté pour suivre un utilisateur.");

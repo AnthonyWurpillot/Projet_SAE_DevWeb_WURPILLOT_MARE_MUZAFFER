@@ -465,3 +465,33 @@ body {
     font-size: 13px;
     color: #657786;
 }
+
+
+/*
+   12. PORTAIL DE CONNEXION
+*/
+
+.login-portal {
+    padding: 30px;
+}
+
+.login-portal > p {
+    color: #657786;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.login-portal form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+button.nav-link {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+}

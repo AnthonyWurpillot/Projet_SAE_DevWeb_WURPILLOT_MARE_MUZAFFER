@@ -17,7 +17,7 @@ class AbonnerTag
     public function execute(mixed $libelle): bool
     {
 
-        $idUtilisateur = (int) ($_SESSION['idUtilisateur'] ?? $_SESSION['user_id'] ?? 1);
+        $idUtilisateur = (int) ($_SESSION['idUtilisateur'] ?? 0);
 
         if ($idUtilisateur <= 0) {
             throw new \Exception("Vous devez être connecté pour vous abonner à un tag.");

@@ -13,11 +13,13 @@ use iutnc\touiteur\action\TouiteDetailAction;
 use iutnc\touiteur\action\UserPageAction;
 use iutnc\touiteur\action\InfluenceursAction;
 use iutnc\touiteur\action\TagAction;
+use iutnc\touiteur\action\LoginAction;
 
 use iutnc\touiteur\traitement\PublierTouite;
 use iutnc\touiteur\traitement\SuivreUtilisateur;
 use iutnc\touiteur\traitement\AbonnerTag;
 use iutnc\touiteur\traitement\NoterTouite;
+use iutnc\touiteur\traitement\ConnecterUtilisateur;
 
 class Dispatcher
 {
@@ -39,6 +41,11 @@ class Dispatcher
 
     public function run(): void
     {
+
+    if (!isset($_SESSION['idUtilisateur']) && $this->action !== 'login') {
+        header('Location: ?action=login');
+        exit;
+    }
 
     try {
 
@@ -111,6 +118,25 @@ class Dispatcher
             $actionObj = new TagAction($this->touiteRepo);
             break;
 
+        case 'login':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                (new ConnecterUtilisateur($this->utilisateurRepo))
+                    ->execute($_POST['idUtilisateur'] ?? null);
+                header('Location: ?action=home');
+                exit;
+            }
+            if (isset($_SESSION['idUtilisateur'])) {
+                header('Location: ?action=home');
+                exit;
+            }
+            $actionObj = new LoginAction($this->utilisateurRepo);
+            break;
+
+        case 'logout':
+            unset($_SESSION['idUtilisateur']);
+            header('Location: ?action=login');
+            exit;
+
         case 'home':
         default:
             $actionObj = new HomeAction($this->touiteRepo);
@@ -156,6 +182,9 @@ class Dispatcher
     $navHome = $this->action === 'home' ? ' active' : '';
     $navExplore = $this->action === 'explore' ? ' active' : '';
     $navInfluenceurs = $this->action === 'influenceurs' ? ' active' : '';
+    $logoutNav = isset($_SESSION['idUtilisateur'])
+        ? "<a href='?action=logout' class='nav-link'>Déconnexion</a>"
+        : '';
 
     echo <<<HTML
 
@@ -178,6 +207,7 @@ class Dispatcher
                 <a href="?action=home" class="nav-link{$navHome}">Accueil</a>
                 <a href="?action=explore" class="nav-link{$navExplore}">Explorer</a>
                 <a href="?action=influenceurs" class="nav-link{$navInfluenceurs}">Influenceurs</a>
+                {$logoutNav}
             </nav>
         </aside>
 

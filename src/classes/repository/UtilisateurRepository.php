@@ -71,6 +71,24 @@ class UtilisateurRepository
         return $collection;
     }
 
+    public function findAll(): array
+    {
+        $sql = "SELECT idUtilisateur, pseudo, nom, prenom, email, nbTouites
+                FROM Utilisateur
+                ORDER BY pseudo ASC";
+
+        $stmt = $this->pdo->query($sql);
+        $lignes = $stmt->fetchAll();
+
+        $collection = [];
+
+        foreach ($lignes as $ligne) {
+            $collection[] = $this->creerUtilisateurDepuisLigne($ligne);
+        }
+
+        return $collection;
+    }
+
     private function creerUtilisateurDepuisLigne(array $ligne): Utilisateur
     {
         return new Utilisateur(
